@@ -1,4 +1,4 @@
-# Otimização de Rota com Algoritmos Heurísticos
+# 🗺️ Otimização de Rota com Algoritmos Heurísticos
 
 Este projeto demonstra a aplicação de algoritmos de otimização para resolver o **Problema do Caixeiro Viajante (TSP)** em uma aplicação real na cidade de João Pessoa, na Paraíba. O objetivo é encontrar a rota mais curta para visitar um conjunto de pontos turísticos e retornar ao ponto de partida.
 
