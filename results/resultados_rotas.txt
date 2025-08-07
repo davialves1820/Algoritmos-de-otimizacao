@@ -3,21 +3,21 @@ Resultados da Otimização de Rota (Problema do Caixeiro Viajante)
 
 ---
 Rota inicial:
-Ordem: Centro Histórico -> UFPB -> Estação Cabo Branco -> Shopping Manaíra -> Busto de Tamandaré
-Custo total: 29163.68 metros
+Ordem: Shopping Manaíra -> Estação Cabo Branco -> Busto de Tamandaré -> UFPB -> Centro Histórico
+Custo total: 29069.79 metros
 Tempo de execução: Não aplicável
 ---
 Hill Climbing:
-Ordem: Shopping Manaíra -> Centro Histórico -> UFPB -> Estação Cabo Branco -> Busto de Tamandaré
+Ordem: Busto de Tamandaré -> Shopping Manaíra -> Centro Histórico -> UFPB -> Estação Cabo Branco
 Custo total: 26351.82 metros
-Tempo de execução: 0.0001 segundos
+Tempo de execução: 0.0002 segundos
 ---
 Simulated Annealing:
-Ordem: Centro Histórico -> UFPB -> Estação Cabo Branco -> Busto de Tamandaré -> Shopping Manaíra
+Ordem: UFPB -> Estação Cabo Branco -> Busto de Tamandaré -> Shopping Manaíra -> Centro Histórico
 Custo total: 26351.82 metros
-Tempo de execução: 0.0292 segundos
+Tempo de execução: 0.0119 segundos
 ---
 Algoritmo Genético:
-Ordem: Estação Cabo Branco -> Busto de Tamandaré -> Shopping Manaíra -> Centro Histórico -> UFPB
+Ordem: Busto de Tamandaré -> Shopping Manaíra -> Centro Histórico -> UFPB -> Estação Cabo Branco
 Custo total: 26351.82 metros
-Tempo de execução: 0.0435 segundos
+Tempo de execução: 0.0189 segundos
