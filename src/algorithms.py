@@ -2,9 +2,8 @@ import random
 import math
 from data_handler import fitness_function  # Função que calcula o custo (distância total) de uma rota
 
-# ==========================
+
 # Algoritmo Hill Climbing
-# ==========================
 # Procura local por uma solução melhor, realizando pequenas trocas (vizinhança).
 # Só aceita mudanças se o custo for melhor (menor distância total).
 def hill_climb(rota_inicial, dist_matrix):
@@ -30,9 +29,7 @@ def hill_climb(rota_inicial, dist_matrix):
     return atual, atual_custo  # Retorna a melhor rota encontrada
 
 
-# ===============================
 # Algoritmo Simulated Annealing
-# ===============================
 # Permite aceitar soluções piores com uma certa probabilidade (baseada na temperatura),
 # o que evita ficar preso em mínimos locais.
 def simulated_annealing(rota_inicial, dist_matrix, T, T_min, alpha):
@@ -62,9 +59,7 @@ def simulated_annealing(rota_inicial, dist_matrix, T, T_min, alpha):
     return melhor, melhor_custo  # Retorna a melhor rota encontrada
 
 
-# ====================
 # Algoritmo Genético
-# ====================
 # Inspiração biológica: seleção, cruzamento (crossover) e mutação.
 # Trabalha com uma população de rotas que evolui a cada geração.
 
