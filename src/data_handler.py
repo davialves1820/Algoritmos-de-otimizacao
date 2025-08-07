@@ -42,6 +42,7 @@ def prepare_data():
                     for i in range(len(caminho) - 1):
                         u, v = caminho[i], caminho[i+1]
                         dist += G.get_edge_data(u, v)[0]['length']
+                    
                     dist_matrix[origem][destino] = dist
                     paths_matrix[origem][destino] = caminho
                 except nx.NetworkXNoPath:
