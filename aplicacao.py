@@ -1,23 +1,15 @@
 # Importa as bibliotecas necessárias para o projeto
-# osmnx: Para baixar e trabalhar com grafos de ruas do OpenStreetMap
-# networkx: Para analisar e manipular grafos, como encontrar o caminho mais curto
-# random: Para gerar números aleatórios, usado na rota inicial e em alguns algoritmos
-# numpy: Para operações numéricas de alta performance (opcional, mas comum)
-# math: Para funções matemáticas, como a exponencial usada no Simulated Annealing
-# matplotlib.pyplot: Para plotar os mapas e visualizações
-# time: Para medir o tempo de execução de cada algoritmo
-# os: Para interagir com o sistema de arquivos, como criar pastas
-import osmnx as ox
-import networkx as nx
-import random
-import numpy as np
-import math
-import matplotlib.pyplot as plt
-import time
-import os
 
-# --- Etapa 1: Definição dos Dados ---
-# 1. Definir os pontos de interesse na cidade de João Pessoa (PB).
+import osmnx as ox # Para baixar e trabalhar com grafos de ruas do OpenStreetMap
+import networkx as nx # Para analisar e manipular grafos, como encontrar o caminho mais curto
+import random # Para gerar números aleatórios, usado na rota inicial e em alguns algoritmos
+import numpy as np # Para operações numéricas de alta performance (opcional, mas comum)
+import math # Para funções matemáticas, como a exponencial usada no Simulated Annealing
+import matplotlib.pyplot as plt # Para plotar os mapas e visualizações
+import time # Para medir o tempo de execução de cada algoritmo
+import os # Para interagir com o sistema de arquivos, como criar pastas
+
+# Definir os pontos de interesse na cidade de João Pessoa (PB).
 # O formato é um dicionário onde a chave é o nome do local e o valor é uma tupla (longitude, latitude).
 locais = {
     "UFPB": (-34.8708, -7.1377),
@@ -26,21 +18,17 @@ locais = {
     "Centro Histórico": (-34.8783, -7.1225),
     "Estação Cabo Branco": (-34.7942, -7.1480)
 }
-# --- Fim Etapa 1 ---
 
-# --- Etapa 2: Preparação do Grafo de Ruas ---
-# 2. Baixar o grafo de ruas da cidade de João Pessoa a partir do OpenStreetMap.
+# Baixar o grafo de ruas da cidade de João Pessoa a partir do OpenStreetMap.
 # O 'network_type' define que queremos um grafo de vias para veículos.
 G = ox.graph_from_place("João Pessoa, Brazil", network_type='drive')
 
-# 3. Mapear os pontos de interesse para os nós mais próximos no grafo de ruas.
+# Mapear os pontos de interesse para os nós mais próximos no grafo de ruas.
 # Isso é necessário porque as coordenadas exatas dos locais podem não ser um nó de interseção.
 nodes = {nome: ox.distance.nearest_nodes(G, lon, lat) for nome, (lon, lat) in locais.items()}
 locais_nomes = list(nodes.keys())
-# --- Fim Etapa 2 ---
 
-# --- Etapa 3: Pré-Cálculo de Distâncias e Caminhos ---
-# 4. Calcular a matriz de distâncias reais (por vias) e os caminhos entre todos os pares de locais.
+# Calcular a matriz de distâncias reais (por vias) e os caminhos entre todos os pares de locais.
 # Isso evita recalcular o menor caminho várias vezes durante a execução dos algoritmos.
 dist_matrix = {}
 paths_matrix = {}
@@ -68,10 +56,8 @@ for origem in locais_nomes:
                 print(f"Aviso: Não foi encontrado um caminho entre {origem} e {destino}.")
                 dist_matrix[origem][destino] = float('inf') # Define a distância como infinita
                 paths_matrix[origem][destino] = []
-# --- Fim Etapa 3 ---
 
-# --- Etapa 4: Funções de Otimização ---
-# 5. Função de avaliação (fitness): calcula a distância total de uma rota completa.
+# Função de avaliação (fitness): calcula a distância total de uma rota completa.
 # Esta função é a métrica usada para medir a qualidade de cada solução.
 def fitness_function(rota):
     total_dist = 0
@@ -81,7 +67,7 @@ def fitness_function(rota):
         total_dist += dist_matrix[origem][destino]
     return total_dist
 
-# 6. Algoritmo Hill Climbing.
+# Algoritmo Hill Climbing.
 # Faz trocas locais e só aceita melhorias (menor distância).
 def hill_climb(rota_inicial):
     atual = rota_inicial[:]
@@ -99,7 +85,7 @@ def hill_climb(rota_inicial):
                     melhorou = True # Continua buscando melhorias
     return atual, atual_custo
 
-# 7. Algoritmo Simulated Annealing.
+# Algoritmo Simulated Annealing.
 # Similar ao Hill Climbing, mas pode aceitar soluções piores para evitar mínimos locais.
 def simulated_annealing(rota_inicial, T=1000, T_min=1e-6, alpha=0.995):
     atual = rota_inicial[:]
@@ -120,7 +106,7 @@ def simulated_annealing(rota_inicial, T=1000, T_min=1e-6, alpha=0.995):
         T *= alpha # Reduz a temperatura (probabilidade de aceitar piores soluções)
     return melhor, melhor_custo
 
-# 8. Algoritmo Genético.
+# Algoritmo Genético.
 # Simula a evolução com cruzamento e mutação de uma população de rotas.
 def crossover(p1, p2):
     start, end = sorted(random.sample(range(len(p1)), 2))
@@ -146,10 +132,9 @@ def genetic_algorithm(pop_size=20, generations=200):
         pop = nova_pop
     melhor = pop[0]
     return melhor, fitness_function(melhor)
-# --- Fim Etapa 4 ---
 
-# --- Etapa 5: Execução Principal e Medição de Tempo ---
-# 9. Testar os algoritmos e medir seus tempos de execução.
+# Execução Principal e Medição de Tempo ---
+# Testar os algoritmos e medir seus tempos de execução.
 rota_inicial = locais_nomes[:]
 random.shuffle(rota_inicial)
 
@@ -164,10 +149,8 @@ time_sa = time.time() - start_time
 start_time = time.time()
 rota_gen, custo_gen = genetic_algorithm()
 time_gen = time.time() - start_time
-# --- Fim Etapa 5 ---
 
-# --- Etapa 6: Criação de Pastas e Visualização ---
-# 10. Funções para criar as pastas de resultados e plotar os mapas.
+# Funções para criar as pastas de resultados e plotar os mapas.
 def create_folders_if_not_exists():
     # Cria a pasta 'img' para as imagens dos mapas, se não existir.
     if not os.path.exists("img"):
@@ -207,10 +190,9 @@ def plot_route(route, G, nodes, paths_matrix, title, filename):
     plt.savefig(f"img/{filename}", dpi=300, bbox_inches='tight')
     # Fecha a figura para liberar memória e evitar sobreposição de gráficos.
     plt.close(fig)
-# --- Fim Etapa 6 ---
 
-# --- Etapa 7: Geração e Salvamento dos Resultados ---
-# 11. Formatar a string de resultados com as informações de cada algoritmo.
+# Geração e Salvamento dos Resultados ---
+# Formatar a string de resultados com as informações de cada algoritmo.
 resultados_str = f"""
 Resultados da Otimização de Rota (Problema do Caixeiro Viajante)
 
@@ -236,7 +218,7 @@ Custo total: {custo_gen:.2f} metros
 Tempo de execução: {time_gen:.4f} segundos
 """
 
-# 12. Criar as pastas e salvar o arquivo de texto.
+# Criar as pastas e salvar o arquivo de texto.
 create_folders_if_not_exists()
 
 print(resultados_str)
@@ -246,11 +228,10 @@ with open("results/resultados_rotas.txt", "w", encoding="utf-8") as f:
 
 print("Resultados salvos no arquivo 'results/resultados_rotas.txt'.")
 
-# 13. Plotar e salvar os mapas de cada rota.
+# Plotar e salvar os mapas de cada rota.
 plot_route(rota_inicial, G, nodes, paths_matrix, "Rota Inicial (Embaralhada)", "mapa_rota_inicial.png")
 plot_route(rota_hill, G, nodes, paths_matrix, "Rota Hill Climbing", "mapa_hill_climbing.png")
 plot_route(rota_sa, G, nodes, paths_matrix, "Rota Simulated Annealing", "mapa_simulated_annealing.png")
 plot_route(rota_gen, G, nodes, paths_matrix, "Rota Algoritmo Genético", "mapa_algoritmo_genetico.png")
 
 print("Mapas salvos como imagens PNG na pasta 'img'.")
-# --- Fim Etapa 7 ---
